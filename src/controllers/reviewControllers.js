@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const ObjectId = mongoose.Types.ObjectId
 const reviewModal=require('../model/reviewModel')
 const bookModal=require('../model/bookModel')
 
@@ -52,14 +51,15 @@ try{
     }
     const reviewedAt=new Date();
     let reviewData={bookId,reviewedBy,reviewedAt,rating};
+
     reviewData = await reviewModal.create(reviewData)
+
     let checker = await reviewModal.find({bookId:bookId,isDeleted:false});
 
             let number = checker.length
 
-
-
              await bookModal.findOneAndUpdate({_id:bookId,isDeleted:false},{reviews:number})
+             
     res.status(201).send({status:true,message: 'Success',data:reviewData})
   }else{
     res.status(404).send({status:false,message:"book dose not exist"})
@@ -83,7 +83,7 @@ const reviewDelete = async function (req, res) {
      
     const bookID = req.params.bookId
     if (!isValidObjectId(bookID)) {
-      res.status(404).send({ status: false, message: `${bookId} is not a valid book id` })
+      res.status(404).send({ status: false, message: `${bookID} is not a valid book id` })
       return
     }
     if (!isValid(bookID)) {
@@ -99,10 +99,8 @@ const reviewDelete = async function (req, res) {
   
     if (reviewNew) {
       
-     
        res.status(200).send({ staus: true,message:"review has been deleted"})
-    }
-    else {
+    }else {
       return res.status(404).send({ msg: "Review Has Been Already Deleted" })
     }
   }
@@ -150,7 +148,7 @@ const updateReview = async function (req, res) {
       }
       let find = await bookModal.findOne({ _id: bookId, isDeleted: false })
       if (!find) {
-          return res.status(400).send({ messege: "The Book Doesn't Exist In Our Data" })
+          return res.status(400).send({ messege: "The Book Doesn't Exist " })
       }
       let check = await reviewModal.findOne({ _id: reviewId, isDeleted: false })
       if (!check) {

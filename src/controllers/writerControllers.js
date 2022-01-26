@@ -21,7 +21,7 @@ const creatWriter = async function (req, res) {
       res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide writer details' });
       return;
     }
-    const { title,name,phone,email,password}=writer
+    const { title,name,phone,email,password,address}=writer
     const isNameAlreadyUsed = await writerModal.findOne({ phone:phone,email:email });
             if (isNameAlreadyUsed) {
                 return res.status(403).send({ status: false, message: 'writer  already  exist' });
@@ -35,7 +35,6 @@ const creatWriter = async function (req, res) {
         return res.status(403).send({ status: false, message: 'email already  exist,use different email' });
     }
     
-    const {address}=writer
     if (!isValid(title)) {
       res.status(400).send({ status: false, message: 'Title  is required' });
       return;

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const ObjectId = mongoose.Types.ObjectId
 const moment =require('moment')
 const bookModal=require('../model/bookModel')
 const reviewModal = require('../model/reviewModel')
@@ -21,9 +20,8 @@ const bookCreation = async function (req, res){
     try{
         const book = req.body;
        
-
         if (!isValidRequestBody(book)) {
-            res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide writer details' });
+            res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide book details' });
             return;
           }
         const {title,excerpt,userId,ISBN,category,subCategory,review,deletedAt,isDeleted,releasedAt} = book
@@ -141,12 +139,12 @@ const getBooksById = async function (req, res){
       return
   }
   
-  let blog = await bookModal.findOne({_id: param})
-  let {title,bookCover,excerpt,userId,category,subcategory,deleted,reviews,deletedAt,releasedAt,createdAt,updatedAt}=blog
-  let reviewsData = await reviewModal.find({ bookId: blog }).select({ createdAt: 0, updatedAt: 0, __v: 0 });
-  const book ={title,bookCover,excerpt,userId,category,subcategory,deleted,reviews,deletedAt,releasedAt,createdAt,updatedAt,reviewsData}
-  book["reviews"]=book["reviewsData"].length
-   res.status(200).send({staus:true,data:book})
+  let book = await bookModal.findOne({_id: param})
+  let {title,bookCover,excerpt,userId,category,subcategory,deleted,reviews,deletedAt,releasedAt,createdAt,updatedAt}=book
+  let reviewsData = await reviewModal.find({ bookId: book }).select({ createdAt: 0, updatedAt: 0, __v: 0 });
+  const book1 ={title,bookCover,excerpt,userId,category,subcategory,deleted,reviews,deletedAt,releasedAt,createdAt,updatedAt,reviewsData}
+  book1["reviews"]=book1["reviewsData"].length
+   res.status(200).send({staus:true,data:book1})
   }catch (error) {
      res.status(500).send({ status: false, message: error.message });
    }
